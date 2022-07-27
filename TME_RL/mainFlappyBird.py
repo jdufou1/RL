@@ -271,8 +271,6 @@ if __name__ == "__main__":
 
     algo.save_model(PATH_MODEL_A,PATH_MODEL_B)
 
-
-
     policy = algo.get_policy()
 
     agent = FlappyAgent(env_gym,policy)

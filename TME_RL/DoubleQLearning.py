@@ -15,7 +15,7 @@ class DoubleQLearning(AlgoRLMF) :
     paper : https://proceedings.neurips.cc/paper/2010/file/091d584fced301b442654dd8c23b3fc9-Paper.pdf
     """
 
-    STEP_SAVE = 100000
+    STEP_SAVE = 10000
 
     def __init__(self, S: list, A: dict, env: Env, path_table_a = None, path_table_b = None) -> None:
         super().__init__(S, A, env)
@@ -40,7 +40,7 @@ class DoubleQLearning(AlgoRLMF) :
                     self.Q_a[(s,a)] = 0
                     self.Q_b[(s,a)] = 0
 
-    def learning(self,df = 0.99 , lr = 0.8, itermax = 10,eps = 0.1) :
+    def learning(self,df = 0.99 , lr = 0.8, itermax = 100000,eps = 0.1) :
         self.stats(df,lr,itermax,eps)
         list_reward = list()
         for i in tqdm(range(itermax)) :

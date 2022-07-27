@@ -111,3 +111,6 @@ class AlgoRLPB(AlgoRL) :
             torch.nn.Linear(self.nb_neurons,self.nb_action),
             torch.nn.Softmax()
         )
+
+    def set_optim(self,lr=0.01) :
+        self.optimizer = torch.optim.Adam(self.model.parameters(),lr=lr)
