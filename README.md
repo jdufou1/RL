@@ -7,7 +7,7 @@ In this repo, you could find the implementation of Reinforcement Learning algori
 ## Double Q-Learning for Flappy Bird
 I used the Double-Q-Learning to make a flappy bird agent. Therefore, I had to discretize the observation space : (x,y,speed)
 where x : horizontal distance between the bird and the agent, y : the vertical distance and the vertical-speed of the bird.
-So, I round the value to make these tabular values. The learning took me about 8/9 hours and the agent was capable to reach an average score of 80. The project is here.
+So, I round the value to make these values tabular. The learning took me about 8/9 hours with CPU and the agent was capable to reach an average score of 45. The project is here.
 
 <p align="center">
   <img src="https://github.com/jdufou1/RL/blob/main/img/flappy_bird.gif" alt="animated" height="450px"/>
