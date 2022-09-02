@@ -1,39 +1,48 @@
 """
-Import
+Algorithme Double DQN
+paper : https://arxiv.org/pdf/1509.06461.pdf
+cartpole parameters : https://pytorch.org/tutorials/intermediate/reinforcement_q_learning.html
 """
-
+from torch.utils.tensorboard import SummaryWriter
 from torch import nn
 import torch
 import gym
 from collections import deque
-import itertools
 import numpy as np
 import random
 
 """
 Hyper parameters
 """
-
 GAMMA = 0.99
-BATCH_SIZE = 32
+BATCH_SIZE = 64
 BUFFER_SIZE = 50000
-MIN_REPLAY_SIZE = 1000
-EPSILON_START = 1.0
-EPSILON_END = 0.02
-EPSILON_DECAY = 10000
-TARGET_UPDATE_FREQUENCY = 1000
+MIN_REPLAY_SIZE = BATCH_SIZE
+EPSILON_START = 0.9
+EPSILON_END = 0.05
+EPSILON_DECAY = 200
+TARGET_UPDATE_FREQUENCY = 5 # Mise a jour des poids de la fonction target
+NB_STEPS = 200000 # nombre d'iterations
+TEST_FREQUENCY = 5
+LOG_DIR = './log/ddqn_mse_lunarlander'
+LR = 2.5e-4
 
 class Network(nn.Module) :
 
     def __init__(self,env) -> None:
         super().__init__()
 
-        in_features = int(np.prod(env.observation_space.shape))
+        nb_obs = int(np.prod(env.observation_space.shape))
+        nb_actions = env.action_space.n
+        nb_neurons = 64
+
 
         self.net = nn.Sequential(
-            nn.Linear(in_features, 64),
-            nn.Tanh(),
-            nn.Linear(64,env.action_space.n)
+            nn.Linear(nb_obs, nb_neurons),
+            nn.ReLU(),
+            nn.Linear(nb_neurons,nb_neurons),
+            nn.ReLU(),
+            nn.Linear(nb_neurons,nb_actions)
         )
 
     def forward(self,x):
@@ -42,25 +51,22 @@ class Network(nn.Module) :
     def act(self, obs):
         obs_t = torch.as_tensor(obs , dtype=torch.float32)
         q_values = self(obs_t.unsqueeze(0))
-
         max_q_index = torch.argmax(q_values, dim=1)[0]
         action = max_q_index.detach().item()
-
         return action
 
-env = gym.make('CartPole-v0')
+env = gym.make('LunarLander-v2')
 
 replay_buffer = deque(maxlen=BUFFER_SIZE)
-rew_buffer = deque([0.0], maxlen=100)
-
-episode_reward = 0.0
 
 online_net = Network(env)
 target_net = Network(env)
 
 target_net.load_state_dict(online_net.state_dict())
 
-optimizer = torch.optim.Adam(online_net.parameters(), lr=5e-4)
+optimizer = torch.optim.RMSprop(online_net.parameters(),lr=LR)
+summary_writer = SummaryWriter(LOG_DIR)
+
 
 obs = env.reset()
 
@@ -76,9 +82,9 @@ for _ in range(MIN_REPLAY_SIZE) :
     if done : 
         obs = env.reset()
 
-for step in itertools.count() : 
+episode = 0
+for step in range(NB_STEPS) : 
     epsilon = np.interp(step , [0, EPSILON_DECAY] , [EPSILON_START , EPSILON_END])
-
 
     rnd_sample = random.random()
 
@@ -93,16 +99,7 @@ for step in itertools.count() :
     replay_buffer.append(transition)
     obs = new_obs
 
-    episode_reward += rew
-
-    if done : 
-        obs = env.reset()
-
-        rew_buffer.append(episode_reward)
-        episode_reward = 0.0
-
     transitions = random.sample(replay_buffer , BATCH_SIZE)
-
 
     obses = np.asarray([t[0] for t in transitions])
     actions = np.asarray([t[1] for t in transitions])
@@ -116,16 +113,13 @@ for step in itertools.count() :
     dones_t = torch.as_tensor(dones, dtype=torch.float32).unsqueeze(-1)
     new_obses_t = torch.as_tensor(new_obses, dtype=torch.float32)
 
-    target_q_values = target_net(new_obses_t)
-    max_target_q_values = target_q_values.max(dim=1, keepdim=True)[0]
-
-    targets = rews_t + GAMMA * (1 - dones_t) * max_target_q_values
+    targets = rews_t + GAMMA * (1 - dones_t) * torch.gather(input=target_net(new_obses_t), dim=1, index=torch.argmax(online_net(new_obses_t),dim=1).unsqueeze(-1))
 
     q_values = online_net(obses_t)
 
     action_q_values = torch.gather(input=q_values, dim=1, index=actions_t)
 
-    loss = nn.functional.smooth_l1_loss(action_q_values , targets)
+    loss = (action_q_values - targets).pow(2).mean() # pour eviter l'explosion de gradient
 
     optimizer.zero_grad()
 
@@ -133,10 +127,22 @@ for step in itertools.count() :
 
     optimizer.step()
 
-    if step % TARGET_UPDATE_FREQUENCY == 0 :
+    if episode % TARGET_UPDATE_FREQUENCY == 0 :
         target_net.load_state_dict(online_net.state_dict())
 
-    if step % 1000 == 0:
-        print()
-        print('Step', step)
-        print('Avg Rew',np.mean(rew_buffer) )
+    if done : 
+        episode += 1
+        if episode % TEST_FREQUENCY == 0 :
+            state = env.reset()
+            done = False
+            cum_sum = 0
+            while not done :
+                state = torch.as_tensor(state,dtype=torch.float32)
+                action = torch.argmax(online_net(state)).item()
+                new_state,reward,done,_ = env.step(action)
+                cum_sum+=reward
+                state=new_state
+            print(f"episode {episode} - timestep {step} - testreward {cum_sum}")
+            summary_writer.add_scalar('Rewards' , cum_sum , global_step=episode)
+
+        obs = env.reset()
