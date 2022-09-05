@@ -19,6 +19,12 @@ So, I round the value to make these values tabular. The learning took me about 8
 ## DQN-family
 Then, I work on the DQN to understand why this family works very well on the ATARI games. So, I read some papers and I have implemented three versions : vanilla DQN , Double/Dueling DQN,  Double DQN with Prioritized Experience Replay buffer and D3QN. The last one allows me to learn parameters for the flappy bird game from the RGB representation.
 
+<div style="display:flex;">
+    <img src="https://github.com/jdufou1/RL/blob/main/img/test_lunarlander_dqn.png" alt="drawing" width="43%"/>
+    <img src="https://github.com/jdufou1/RL/blob/main/img/lunarlander.gif" alt="drawing" width="45%"/>
+</div>
+
+
 ## Gradient-based methods
 All of these algorithms are value-based and the policy is directly derivative from the value-function (state or action).An other possibility is to work directly on the parameters of the policy $\pi_{\theta}$. Therefore, I have implemented gradient-based (Deep RL) algorithms such that Reinforce, A2C (actor-critic method : we learn value-function and policy iteratively), PPO and DDPG. I have used Pytorch to build my neural networks.
 
