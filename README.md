@@ -1,7 +1,7 @@
 # ES-RL/RL Algorithms
 
 ## Value-based methods
-In this repo, you could find the implementation of Reinforcement Learning algorithms. I have started with the two most famous RL model-based algorithms : Policy and Value Iteration. Also, I have implemented model-free algorithms such that Q-Learning / Double Q-Learning (with two estimators to reduce overestimation), SARSA / Expected SARSA , TD($\lambda$) with eligibility traces and Monte-Carlo method.
+In this repo, you could find the implementation of Reinforcement Learning algorithms. I have started with the two most famous RL model-based algorithms : Policy and Value Iteration. Also, I have implemented model-free algorithms such as Q-Learning / Double Q-Learning (with two estimators to reduce overestimation), SARSA / Expected SARSA , TD($\lambda$) with eligibility traces and Monte-Carlo method.
 
 <p align="center">
   <img src="https://github.com/jdufou1/RL/blob/main/img/test_taxiv3_value_based.png" height="250px"/>
