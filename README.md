@@ -30,7 +30,7 @@ All of these algorithms are value-based and the policy is directly derivative fr
 
 ## Evolution Strategies methods for RL environments 
 
-These methods are very differents of the RL-methods and work like black-box. Now, we will stop to make gradient operation or learn a value-function because we will apply a gaussian noise on the parameters and learn with it. So, it requires more sampling. Firslr, I have implemented basics algorithms to find the minimum of some loss function : Naive (1+1)-ES , ($\mu=$m + $\lambda=$n)-ES , Cross-Entropy Method (CEM) and so on... then I apply these method on the RL environment : Walker2d-v2, Humanoid-v0 from MuJoCo. You could find my work on this notebook here.
+These methods are very differents of the RL-methods and work like black-box. Now, we will stop to make gradient operation or learn a value-function because we will apply a gaussian noise on the parameters and learn with it. So, it requires more sampling. Firslr, I have implemented basics algorithms to find the minimum of some loss function : Naive (1+1)-ES , ($\mu=$m + $\lambda=$n)-ES , Cross-Entropy Method (CEM) and so on... then I apply these methods on the RL environment : Walker2d-v2, Humanoid-v0 from MuJoCo. You could find my work on this notebook here.
 
 ## Source
 
