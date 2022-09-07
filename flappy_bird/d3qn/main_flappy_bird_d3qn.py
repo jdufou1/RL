@@ -78,14 +78,16 @@ def play_env(fps=-1):
     return cum_sum,score
 
 
-average_score = 0
-average_cum_sum = 0
-nb_eval = 100
-for i in tqdm(range(nb_eval)) :
-    cum_sum,score = play_env(fps=-1)
-    average_score += score
-    average_cum_sum += cum_sum
-average_score /= nb_eval
-average_cum_sum /= nb_eval 
+# average_score = 0
+# average_cum_sum = 0
+# nb_eval = 100
+# for i in tqdm(range(nb_eval)) :
+#     cum_sum,score = play_env(fps=-1)
+#     average_score += score
+#     average_cum_sum += cum_sum
+# average_score /= nb_eval
+# average_cum_sum /= nb_eval 
 
-print(f"score moyen sur {nb_eval}  : {average_score} et moyen des rewards : {average_cum_sum}")
+# print(f"score moyen sur {nb_eval}  : {average_score} et moyen des rewards : {average_cum_sum}")
+
+play_env(fps=30)
