@@ -136,7 +136,7 @@ for episode in tqdm(range(nb_episode)) :
     while not done : 
         state_t = torch.as_tensor(state , dtype = torch.float32).unsqueeze(0)
         
-        if random.random() < epsilon :
+        if random.random() > epsilon :
             action = torch.argmax(q_network(state_t)).item()
         else :
             action = env.action_space.sample()

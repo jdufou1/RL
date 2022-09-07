@@ -17,14 +17,14 @@ So, I round the value to make these values tabular. The learning took me about 8
 </p>
 
 ## DQN-family
-Then, I work on the DQN to understand why this family works very well on the ATARI games. So, I read some papers and I have implemented three versions : vanilla DQN , Double/Dueling DQN,  Double DQN with Prioritized Experience Replay buffer and D3QN. The last one allows me to learn parameters for the flappy bird game from the RGB representation.
+Then, I work on the DQN to understand why this family works very well on the ATARI games. So, I read some papers and I have implemented three versions : vanilla DQN , Double/Dueling DQN,  Double DQN with Prioritized Experience Replay buffer and D3QN. The last one allows me to learn parameters for the flappy bird game.
 
 ## Gradient-based methods
 All of these algorithms are value-based and the policy is directly derivative from the value-function (state or action).An other possibility is to work directly on the parameters of the policy $\pi_{\theta}$. Therefore, I have implemented gradient-based (Deep RL) algorithms such that Reinforce, A2C (actor-critic method : we learn value-function and policy iteratively), PPO and DDPG. I have used Pytorch to build my neural networks.
 
 ## Evolution Strategies methods for RL environments 
 
-These methods are very differents of the RL-methods and work like black-box. Now, we will stop to make gradient operation or learn a value-function because we will apply a gaussian noise on the parameters and learn with it. So, it requires more sampling. Firslr, I have implemented basics algorithms to find the minimum of some loss function : Naive (1+1)-ES , ($\mu=$m + $\lambda=$n)-ES , Cross-Entropy Method (CEM) and so on... then I apply this method on the RL environment : Walker2d-v2, Humanoid-v0 from MuJoCo. You could find my work on this notebook here.
+These methods are very differents of the RL-methods and work like black-box. Now, we will stop to make gradient operation or learn a value-function because we will apply a gaussian noise on the parameters and learn with it. So, it requires more sampling. Firslr, I have implemented basics algorithms to find the minimum of some loss function : Naive (1+1)-ES , ($\mu=$m + $\lambda=$n)-ES , Cross-Entropy Method (CEM) and so on... then I apply these method on the RL environment : Walker2d-v2, Humanoid-v0 from MuJoCo. You could find my work on this notebook here.
 
 ## Source
 
