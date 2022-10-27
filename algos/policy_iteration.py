@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-env = gym.make("MazeMDP-v0", kwargs={"width": 10, "height": 10, "ratio": 0.2})
+env = gym.make("Taxi-v3")
 
 nb_actions = env.action_space.n
 nb_observation = env.observation_space.n
